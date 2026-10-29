@@ -1,13 +1,7 @@
-import 'package:archonit_demo/core/injection.dart';
 import 'package:archonit_demo/data/network/api_client.dart';
-import 'package:archonit_demo/data/network/endpoints.dart';
-import 'package:archonit_demo/data/network/params.dart';
 import 'package:archonit_demo/domain/models/error_model.dart';
-import 'package:archonit_demo/resources/app_constants.dart';
 import 'package:archonit_demo/resources/app_strings.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 
 class ApiClientDioImpl implements ApiClient {
   final Dio _dio;
