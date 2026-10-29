@@ -11,9 +11,10 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ApiClientHttpImpl implements ApiClient {
+  final http.Client _client;
   final Params _params;
 
-  ApiClientHttpImpl(this._params);
+  ApiClientHttpImpl(this._client, this._params);
 
   Future<Response> _handleResponseStatus({required Future<dynamic> apiCall}) async {
     final stopwatch = Stopwatch()..start();
@@ -49,11 +50,11 @@ class ApiClientHttpImpl implements ApiClient {
 
   // GET
   @override
-  Future<dynamic> get({required String endpoint, required Map<String, dynamic> queryParams}) async {
+  Future<Map<String, dynamic>> get({required String endpoint, required Map<String, dynamic> queryParams}) async {
     final queryString = Uri(queryParameters: queryParams);
-    final url = '${Endpoints.baseUrl}${Endpoints.fetchAssets}$queryString';
+    final url = '${Endpoints.baseUrl}$endpoint$queryString';
     final resp = await _handleResponseStatus(
-      apiCall: http.get(Uri.parse(url), headers: _params.getHeaders(token: dotenv.env[AppStrings.apiToken])),
+      apiCall: _client.get(Uri.parse(url), headers: _params.getHeaders(token: dotenv.env[AppStrings.apiToken])),
     );
     final data = _decoder(resp);
     return data;

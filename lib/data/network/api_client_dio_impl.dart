@@ -7,17 +7,13 @@ import 'package:archonit_demo/resources/app_constants.dart';
 import 'package:archonit_demo/resources/app_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class ApiClientDioImpl implements ApiClient {
-  ApiClientDioImpl();
+  final Dio _dio;
+  ApiClientDioImpl(this._dio);
 
-  final Dio _dio = Dio(BaseOptions(
-    baseUrl: Endpoints.baseUrl,
-    headers: getIt<Params>().getHeaders(token: dotenv.env[AppStrings.apiToken]),
-    connectTimeout: AppConstants.connectTimeout,
-    receiveTimeout: AppConstants.receiveTimeout,
-    sendTimeout: AppConstants.sendTimeout,
-  ));
+
 
   ErrorModel _mapDioException(DioException e) {
     ErrorModel badResponseHandle() {
@@ -79,7 +75,7 @@ class ApiClientDioImpl implements ApiClient {
 
   // GET
   @override
-  Future<dynamic> get({required String endpoint, required Map<String, dynamic> queryParams}) async {
+  Future<Map<String, dynamic>> get({required String endpoint, required Map<String, dynamic> queryParams}) async {
     final resp = await _dioExceptionHandle(apiCall: _dio.get(endpoint, queryParameters: queryParams));
     return resp.data;
   }
